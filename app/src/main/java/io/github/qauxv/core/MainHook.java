@@ -69,7 +69,7 @@ public class MainHook {
 
     private static MainHook SELF;
 
-    boolean third_stage_inited = false;
+    public boolean third_stage_inited = false;
 
     private MainHook() {
     }

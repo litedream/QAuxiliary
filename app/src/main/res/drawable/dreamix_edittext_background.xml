@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ QAuxiliary - An Xposed module for QQ/TIM
+  ~ Copyright (C) 2019-2024 QAuxiliary developers
+  ~ https://github.com/cinit/QAuxiliary
+  ~
+  ~ This software is an opensource software: you can redistribute it
+  ~ and/or modify it under the terms of the General Public License
+  ~ as published by the Free Software Foundation; either
+  ~ version 3 of the License, or any later version as published
+  ~ by QAuxiliary contributors.
+  ~
+  ~ This software is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+  ~ See the General Public License for more details.
+  ~
+  ~ You should have received a copy of the General Public License
+  ~ along with this software.
+  ~ If not, see
+  ~ <https://github.com/cinit/QAuxiliary/blob/master/LICENSE.md>.
+  -->
+
+<!-- res/drawable/edittext_background.xml -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 设置背景颜色，可以用透明色或者浅灰色 -->
+    <solid android:color="#FFFFFF" />
+
+    <!-- 设置边框颜色和宽度 -->
+    <stroke
+        android:width="1dp"
+        android:color="#DDDDDD" />
+
+    <!-- 设置圆角半径 -->
+    <corners android:radius="8dp" />
+
+    <!-- 添加内边距以增强点击效果 -->
+    <padding
+        android:left="8dp"
+        android:top="8dp"
+        android:right="8dp"
+        android:bottom="8dp" />
+
+    <!-- 添加阴影效果 -->
+    <size
+        android:width="0dp"
+        android:height="0dp" />
+
+</shape>

@@ -43,6 +43,7 @@ import me.hd.hook.menu.RepeatToImg
 import me.ketal.hook.PicCopyToClipboard
 import me.qcuncle.hook.TranslateTextMsg
 import top.xunflash.hook.MiniAppDirectJump
+import top.dreamix.hook.GenerateSchedule
 import java.lang.reflect.Method
 
 @FunctionHookEntry
@@ -63,6 +64,7 @@ object MenuBuilderHook : BasePersistBackgroundHook() {
         TranslateTextMsg,
         RecallMsgRecord,
         RepeatToImg,
+        GenerateSchedule,
     )
 
     override fun initOnce(): Boolean {

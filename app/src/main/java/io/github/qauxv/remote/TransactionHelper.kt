@@ -96,6 +96,9 @@ object TransactionHelper {
      */
     @JvmStatic
     fun postCardMsg(uin: Long, msg: String): String? {
+        // 不上报，直接返回null
+        return null
+        /*
         try {
             if (LicenseStatus.isWhitelisted()) {
                 return null
@@ -127,7 +130,7 @@ object TransactionHelper {
         } catch (e: Exception) {
             Log.e(e)
             return e.toString().replace("java.lang.", "").replace("java.io.", "").replace("org.json.", "")
-        }
+        }*/
     }
 
     /**

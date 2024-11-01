@@ -116,19 +116,21 @@ public class CardMsgSender extends BaseSwitchFunctionDecorator implements IInput
             return false;
         }
         if ((text.contains("<?xml") || text.contains("{\""))) {
+            /* 取消获取uin
             long uin = AppRuntimeHelper.getLongAccountUin();
             if (uin < 10000) {
                 Toasts.error(ctx1, "Invalid account uin");
                 return false;
-            }
+            }*/
             SyncUtils.async(() -> {
                 if (text.contains("<?xml")) {
                     try {
+                        /* 取消发送uin
                         String errorMsg = TransactionHelper.postCardMsg(uin, text);
                         if (errorMsg != null) {
                             Toasts.error(ctx1, errorMsg);
                             return;
-                        }
+                        }*/
                         if (CardMsgSender.ntSendCardMsg(qqApp, session, text)) {
                             SyncUtils.runOnUiThread(() -> input.setText(""));
                         } else {
@@ -143,11 +145,12 @@ public class CardMsgSender extends BaseSwitchFunctionDecorator implements IInput
                     }
                 } else if (text.contains("{\"")) {
                     try {
+                        /* 取消上报
                         String errorMsg = TransactionHelper.postCardMsg(uin, text);
                         if (errorMsg != null) {
                             Toasts.error(ctx1, errorMsg);
                             return;
-                        }
+                        }*/
 
                         sendCard(text, sendBtn, input, ctx1, qqApp, session);
                         // Object arkMsg = load("com.tencent.mobileqq.data.ArkAppMessage").newInstance();

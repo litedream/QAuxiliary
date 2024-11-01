@@ -63,6 +63,7 @@ fun checkCardMsg(originString: String): CardMsgCheckResult {
         Log.d("origin string: $originString")
         val string = decodePercent(originString)
         Log.d("decode string: $string")
+        /* 取消卡片消息黑名单检查
         val blackListString = CardMsgList.getInstance().invoke()
         val blackList = blackListString.decodeToDataClass<Map<String, String>>()
         for (rule in blackList) {
@@ -73,7 +74,7 @@ fun checkCardMsg(originString: String): CardMsgCheckResult {
             ) {
                 return CardMsgCheckResult(false, rule.key)
             }
-        }
+        }*/
         return CardMsgCheckResult(true)
     } catch (e: Exception) {
         Log.e(e)
