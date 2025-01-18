@@ -24,6 +24,7 @@ package io.github.qauxv.util.dexkit
 
 import android.os.Bundle
 import android.view.View
+import android.view.ViewGroup
 import cc.ioctl.util.HostInfo
 import com.github.kyuubiran.ezxhelper.utils.isAbstract
 import com.github.kyuubiran.ezxhelper.utils.isFinal
@@ -41,6 +42,8 @@ import io.github.qauxv.util.Initiator._TroopChatPie
 import io.github.qauxv.util.Initiator.getHostClassLoader
 import io.github.qauxv.util.Initiator.load
 import io.github.qauxv.util.Log
+import io.github.qauxv.util.QQVersion
+import io.github.qauxv.util.requireMinQQVersion
 import me.ketal.data.ConfigData
 import mqq.app.AppRuntime
 
@@ -369,7 +372,7 @@ data object CSystemMessageProcessor : DexKitTarget.UsingStr() {
 data object COnlinePushPbPushTransMsg : DexKitTarget.UsingStr() {
     override val declaringClass = "com.tencent.mobileqq.app.handler.receivesuccess.OnlinePushPbPushTransMsg"
     override val traitString = arrayOf("PbPushTransMsg muteGeneralFlag:")
-    override val filter = DexKitFilter.strInClsName("/receivesuccess/")
+    override val filter = if (requireMinQQVersion(QQVersion.QQ_9_1_30)) DexKitFilter.allowAll else DexKitFilter.strInClsName("/receivesuccess/")
 }
 
 data object CFrameControllerInjectImpl : DexKitTarget.UsingStr() {
@@ -1001,7 +1004,7 @@ data object Hd_AutoSendOriginalPhoto_photoListPanel_Method : DexKitTarget.UsingS
     override val filter = DexKitFilter.allowAll
 }
 
-data object Hd_DisableGrowHalfLayer_Method : DexKitTarget.UsingStringVector() {
+data object Hd_DisableGrowHalfLayer_Method1 : DexKitTarget.UsingStringVector() {
     override val findMethod = true
     override val traitStringVectors = arrayOf(arrayOf("grow_half_layer_info", "grow_half_layer_tech_info"))
     override val declaringClass = "cooperation.vip.ad.GrowHalfLayerHelper"
@@ -1009,6 +1012,13 @@ data object Hd_DisableGrowHalfLayer_Method : DexKitTarget.UsingStringVector() {
         val m = kotlin.runCatching { it.getMethodInstance(getHostClassLoader()) }.getOrNull() ?: return@filter false
         m.returnType == Void.TYPE && m.paramCount == 3
     }
+}
+
+data object Hd_DisableGrowHalfLayer_Method2 : DexKitTarget.UsingStr() {
+    override val findMethod = true
+    override val traitString = arrayOf("start showVasADBanner")
+    override val declaringClass = "cooperation.vip.qqbanner.manager.VasADBannerManager"
+    override val filter = DexKitFilter.allowAll
 }
 
 data object Hd_GagInfoDisclosure_Method : DexKitTarget.UsingStr() {
@@ -1042,5 +1052,29 @@ data object Hd_HideShortcutBar_Method_Troop : DexKitTarget.UsingStr() {
     override val findMethod = true
     override val traitString = arrayOf(",isShowingCustomShortcut:")
     override val declaringClass = "Lcom/tencent/mobileqq/troop/shortcut/aio/TroopShortcutVB;"
+    override val filter = DexKitFilter.allowAll
+}
+
+data object UnlockTroopNameLimitClass : DexKitTarget.UsingStr() {
+    override val findMethod = false
+    override val traitString = arrayOf("[☀-⟿]")
+    override val declaringClass = "Lcom/tencent/mobileqq/activity/editservice/EditTroopMemberNickService\$EmojiFilter;"
+    override val filter = DexKitFilter.strInClsName("com/tencent/mobileqq/activity/editservice/EditTroopMemberNickService")
+}
+
+data object DisableLightInteractionMethod : DexKitTarget.UsingStr() {
+    override val findMethod = true
+    override val traitString = arrayOf("em_bas_shortcut_bar_above_c2c_input_box")
+    override val declaringClass = "Lcom/tencent/mobileqq/aio/bottombar/c2c/LiteActionBottomBar;"
+    override val filter = filter@{ it: DexMethodDescriptor ->
+        val m = kotlin.runCatching { it.getMethodInstance(getHostClassLoader()) }.getOrNull() ?: return@filter false
+        m.returnType == View::class.java && m.paramCount == 2 && m.parameterTypes[1] == ViewGroup::class.java
+    }
+}
+
+data object Hd_HideTipsBar_Method : DexKitTarget.UsingStr() {
+    override val findMethod = true
+    override val traitString = arrayOf("initBannerView | banner = ")
+    override val declaringClass = "Lcom/tencent/mobileqq/banner/BannerManager;"
     override val filter = DexKitFilter.allowAll
 }

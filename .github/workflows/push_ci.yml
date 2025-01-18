@@ -40,7 +40,7 @@ jobs:
           git submodule foreach git submodule update --init --recursive
 
       - name: set up JDK 17
-        uses: actions/setup-java@v4.5.0
+        uses: actions/setup-java@v4.6.0
         with:
           java-version: '17'
           distribution: 'adopt'
@@ -51,6 +51,7 @@ jobs:
           mkdir -p "$ANDROID_HOME/licenses/"
           echo > "$ANDROID_HOME/licenses/android-sdk-license"
           echo -n 24333f8a63b6825ea9c5514f83c2829b004d1fee > "$ANDROID_HOME/licenses/android-sdk-license"
+          $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "cmake;3.31.0"
           echo "sdk.dir=${ANDROID_HOME}" > local.properties
       - name: Install ccache
         run: |
@@ -61,7 +62,7 @@ jobs:
           ccache -o compiler_check='%compiler% -dumpmachine; %compiler% -dumpversion'
           ccache -zp
       - name: Cache Native Build
-        uses: actions/cache@v4.1.2
+        uses: actions/cache@v4.2.0
         with:
           path: |
             ~/.cache/ccache
@@ -77,6 +78,7 @@ jobs:
         run: |
           echo 'org.gradle.parallel=true' >> gradle.properties
           echo 'org.gradle.vfs.watch=true' >> gradle.properties
+          echo 'qauxv.override.ninja.path=/usr/bin/ninja' >> local.properties
           sed -i 's/org.gradle.configuration-cache=true//g' gradle.properties
           echo 'buildCache { local { removeUnusedEntriesAfterDays = 1 } }' >> settings.gradle.kts
           echo ${{ secrets.SIGN_KEYSTORE_BASE64 }} | base64 -d > keystore.jks
@@ -92,6 +94,7 @@ jobs:
           KEYSTORE_PASSWORD: ${{ secrets.SIGN_KEYSTORE_PASSWORD }}
           KEY_ALIAS: ${{ secrets.SIGN_ALIAS }}
           KEY_PASSWORD: ${{ secrets.SIGN_KEY_PASSWORD }}
+          QAUXV_OVERRIDE_CMAKE_VERSION: "3.31.0"
 
       - name: Show Artifacts SHA256
         run: |
@@ -189,7 +192,7 @@ jobs:
           git status telegram-bot-api >> telegram-bot-api-status
       - name: Cache Bot API Binary
         id: cache-bot-api
-        uses: actions/cache@v4.1.2
+        uses: actions/cache@v4.2.0
         with:
           path: telegram-bot-api-binary
           key: CI-telegram-bot-api-${{ hashFiles('telegram-bot-api-status') }}

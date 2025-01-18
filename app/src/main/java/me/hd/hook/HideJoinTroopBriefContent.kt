@@ -20,31 +20,36 @@
  * <https://github.com/cinit/QAuxiliary/blob/master/LICENSE.md>.
  */
 
-package com.xiaoniu.hook
+package me.hd.hook
 
-import com.github.kyuubiran.ezxhelper.utils.hookReturnConstant
+import android.view.View
+import android.view.ViewGroup
+import cc.ioctl.util.hookAfterIfEnabled
 import io.github.qauxv.base.annotation.FunctionHookEntry
 import io.github.qauxv.base.annotation.UiItemAgentEntry
-import io.github.qauxv.dsl.FunctionEntryRouter.Locations.Simplify
+import io.github.qauxv.dsl.FunctionEntryRouter
 import io.github.qauxv.hook.CommonSwitchFunctionHook
+import io.github.qauxv.util.Initiator
 import io.github.qauxv.util.QQVersion
 import io.github.qauxv.util.requireMinQQVersion
-import xyz.nextalone.util.clazz
-import xyz.nextalone.util.method
+import xyz.nextalone.util.get
 
 @FunctionHookEntry
 @UiItemAgentEntry
-object DisableInteractivePop : CommonSwitchFunctionHook() {
-    override val name = "禁用特定消息触发的交互式弹窗"
-    override val extraSearchKeywords = arrayOf("关键词", "三角洲", "宝可梦")
-    override val uiItemLocation = Simplify.UI_CHAT_MSG
+object HideJoinTroopBriefContent : CommonSwitchFunctionHook() {
+
+    override val name = "隐藏进群介绍及相关效果"
+    override val description = "对验证信息页下方的进群介绍布局进行隐藏"
+    override val uiItemLocation = FunctionEntryRouter.Locations.Simplify.CHAT_GROUP_OTHER
     override val isAvailable = requireMinQQVersion(QQVersion.QQ_9_0_0)
 
     override fun initOnce(): Boolean {
-        // keyword string: 跳过, 关闭
-        "Lcom/tencent/mobileqq/springhb/interactive/ui/InteractivePopManager;".clazz!!.method {
-            it.parameterCount > 0 && it.parameterTypes[0].name == "androidx.fragment.app.Fragment"
-        }!!.hookReturnConstant(null)
+        val joinTroopVerifyClass = Initiator.loadClass("com.tencent.mobileqq.activity.JoinTroopVerifyFragment")
+        val initViewMethod = joinTroopVerifyClass.getDeclaredMethod("initView", View::class.java)
+        hookAfterIfEnabled(initViewMethod) { param ->
+            val briefContentLayout = param.thisObject.get("n") as View
+            briefContentLayout.visibility = ViewGroup.GONE
+        }
         return true
     }
 }

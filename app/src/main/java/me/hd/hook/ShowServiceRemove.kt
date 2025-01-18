@@ -20,31 +20,35 @@
  * <https://github.com/cinit/QAuxiliary/blob/master/LICENSE.md>.
  */
 
-package com.xiaoniu.hook
+package me.hd.hook
 
-import com.github.kyuubiran.ezxhelper.utils.hookReturnConstant
+import cc.ioctl.util.hookBeforeIfEnabled
 import io.github.qauxv.base.annotation.FunctionHookEntry
 import io.github.qauxv.base.annotation.UiItemAgentEntry
-import io.github.qauxv.dsl.FunctionEntryRouter.Locations.Simplify
+import io.github.qauxv.dsl.FunctionEntryRouter
 import io.github.qauxv.hook.CommonSwitchFunctionHook
+import io.github.qauxv.util.Initiator
 import io.github.qauxv.util.QQVersion
 import io.github.qauxv.util.requireMinQQVersion
-import xyz.nextalone.util.clazz
-import xyz.nextalone.util.method
 
 @FunctionHookEntry
 @UiItemAgentEntry
-object DisableInteractivePop : CommonSwitchFunctionHook() {
-    override val name = "禁用特定消息触发的交互式弹窗"
-    override val extraSearchKeywords = arrayOf("关键词", "三角洲", "宝可梦")
-    override val uiItemLocation = Simplify.UI_CHAT_MSG
-    override val isAvailable = requireMinQQVersion(QQVersion.QQ_9_0_0)
+object ShowServiceRemove : CommonSwitchFunctionHook() {
+
+    override val name = "显示业务右上角移除选项"
+    override val description = "动态-更多, 业务页可移除游戏中心等"
+    override val extraSearchKeywords = arrayOf("游戏中心")
+    override val uiItemLocation = FunctionEntryRouter.Locations.Simplify.MAIN_UI_OPERATION_LOG
+    override val isAvailable = requireMinQQVersion(QQVersion.QQ_8_9_88)
 
     override fun initOnce(): Boolean {
-        // keyword string: 跳过, 关闭
-        "Lcom/tencent/mobileqq/springhb/interactive/ui/InteractivePopManager;".clazz!!.method {
-            it.parameterCount > 0 && it.parameterTypes[0].name == "androidx.fragment.app.Fragment"
-        }!!.hookReturnConstant(null)
+        val lebaPluginInfoClass = Initiator.loadClass("com.tencent.mobileqq.leba.entity.LebaPluginInfo")
+        val allowMethod = lebaPluginInfoClass.getDeclaredMethod(
+            if (requireMinQQVersion(QQVersion.QQ_9_0_35)) "isAllowUserChange" else "getAllowModify"
+        )
+        hookBeforeIfEnabled(allowMethod) { param ->
+            param.result = true
+        }
         return true
     }
 }
