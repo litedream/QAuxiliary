@@ -175,5 +175,14 @@ public class QQVersion {
     public static final long QQ_9_1_30 = 8538;
     public static final long QQ_9_1_31 = 8542;
     public static final long QQ_9_1_35 = 8708;
-    public static final long QQ_9_1_50 = 9006;
+    public static final long QQ_9_1_50_BETA = 9006;
+    public static final long QQ_9_1_50 = 9048;
+    public static final long QQ_9_1_52 = 9054;
+    public static final long QQ_9_1_55_BETA_23850 = 9180;
+    public static final long QQ_9_1_55 = 9218;
+    public static final long QQ_9_1_60_BETA_24275 = 9350;
+    public static final long QQ_9_1_60 = 9388;
+    public static final long QQ_9_1_65_BETA_24705 = 9522;
+    public static final long QQ_9_1_65 = 9558;
+    public static final long QQ_9_1_70 = 9898;
 }
