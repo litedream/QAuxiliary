@@ -25,7 +25,7 @@ dependencyResolutionManagement {
             content {
                 includeGroup("com.github.livefront.sealed-enum")
                 includeGroup("com.github.MatteoBattilana")
-                includeGroup("com.github.plattysoft")
+                // includeGroup("com.github.plattysoft")
             }
         }
         maven("https://api.xposed.info/") {
@@ -50,8 +50,8 @@ dependencyResolutionManagement {
 includeBuild("build-logic")
 
 plugins {
-    id("com.gradle.develocity") version "4.0.1"
-    id("org.gradle.toolchains.foojay-resolver-convention") version ("0.10.0")
+    id("com.gradle.develocity") version "4.0.2"
+    id("org.gradle.toolchains.foojay-resolver-convention") version ("1.0.0")
 }
 
 develocity {
